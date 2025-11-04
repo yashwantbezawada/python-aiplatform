@@ -3058,6 +3058,7 @@ def test_list_events_non_empty_request_with_auto_populated_field():
         parent="parent_value",
         page_token="page_token_value",
         filter="filter_value",
+        order_by="order_by_value",
     )
 
     # Mock the actual call within the gRPC stub, and fake the request.
@@ -3072,6 +3073,7 @@ def test_list_events_non_empty_request_with_auto_populated_field():
             parent="parent_value",
             page_token="page_token_value",
             filter="filter_value",
+            order_by="order_by_value",
         )
 
 
@@ -4925,6 +4927,7 @@ def test_list_events_rest_required_fields(
     assert not set(unset_fields) - set(
         (
             "filter",
+            "order_by",
             "page_size",
             "page_token",
         )
@@ -4987,6 +4990,7 @@ def test_list_events_rest_unset_required_fields():
         set(
             (
                 "filter",
+                "orderBy",
                 "pageSize",
                 "pageToken",
             )
