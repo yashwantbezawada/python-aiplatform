@@ -590,6 +590,11 @@ def _is_pydantic_serializable(param: inspect.Parameter) -> bool:
     if param.annotation == inspect.Parameter.empty:
         return True
 
+    # Forward references can't be resolved by Pydantic if the type is not
+    # available at runtime (e.g. inside `if TYPE_CHECKING:`).
+    if "ForwardRef" in repr(param.annotation):
+        return False
+
     if isinstance(param.annotation, str):
         return False
 
@@ -664,7 +669,17 @@ def _generate_schema(
         # it is not JSON serializable. We hence exclude it from the schema.
         and param.annotation != asyncio.Queue and _is_pydantic_serializable(param)
     }
-    parameters = pydantic.create_model(f.__name__, **fields_dict).schema()
+    model = pydantic.create_model(f.__name__, **fields_dict)
+    # Pydantic v2 may not be able to resolve forward references if the
+    # types are not in the same module. We need to explicitly call
+    # `model_rebuild` with the correct namespace from the function's module.
+    # See https://errors.pydantic.dev/2/u/class-not-fully-defined
+    f_module = inspect.getmodule(f)
+    if f_module:
+        model.model_rebuild(
+            _types_namespace=f_module.__dict__,
+        )
+    parameters = model.schema()
     # Postprocessing
     # 4. Suppress unnecessary title generation:
     #    * https://github.com/pydantic/pydantic/issues/1051
