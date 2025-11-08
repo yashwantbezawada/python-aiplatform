@@ -1,5 +1,12 @@
 # Changelog
 
+## [1.127.0](https://github.com/googleapis/python-aiplatform/compare/v1.126.1...v1.127.0) (2025-11-08)
+
+
+### Features
+
+* Reenable VertexAiSession for streaming_agent_run_with_events ([d3b12d5](https://github.com/googleapis/python-aiplatform/commit/d3b12d57d1e4f1a8db5f41f597c6cb0f33e8a369))
+
 ## [1.126.1](https://github.com/googleapis/python-aiplatform/compare/v1.126.0...v1.126.1) (2025-11-06)
 
 
